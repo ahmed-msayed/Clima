@@ -10,7 +10,8 @@ import Foundation
 
 class Constants {
     
-    static let API_KEY = "f64e8cc90812d41f85f6d0b47524b466"
+    static let API_KEY = "appid=f64e8cc90812d41f85f6d0b47524b466"
+    static let API_URL = "https://api.openweathermap.org/data/2.5/weather?"
 }
 
 

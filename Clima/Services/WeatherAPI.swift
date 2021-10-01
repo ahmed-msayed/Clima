@@ -8,18 +8,26 @@
 
 import Foundation
 import Alamofire
+import CoreLocation
 
 class WeatherAPI {
     
     var delegate: WeatherApiDelegate?
     
-    func performRequest(with cityName: String) {    //cool ext. parameter
-        let urlString = "https://api.openweathermap.org/data/2.5/weather?appid=\(Constants.API_KEY)&units=metric&q=\(cityName)"
+    func fetchWeather(with cityName: String) {  //cool ext. parameter
+        let urlString = "\(Constants.API_URL)\(Constants.API_KEY)&units=metric&q=\(cityName)"
+        performRequest(urlString: urlString)
+    }
+    
+    func fetchWeather(longitude: CLLocationDegrees, latitude: CLLocationDegrees) {
+        let urlString = "\(Constants.API_URL)\(Constants.API_KEY)&units=metric&lat=\(latitude)&lon=\(longitude)"
+        performRequest(urlString: urlString)
+    }
+    
+    func performRequest(urlString: String) {
         
         guard let url = URL(string: urlString) else { return }
-        
         let session = URLSession(configuration: .default)
-        
         let task = session.dataTask(with: url) { data, response, error in
             
             guard error == nil else {
@@ -49,7 +57,7 @@ class WeatherAPI {
             let temp = decodedData.main.temp
             
             let weather = WeatherModel(conditionId: id, cityName: name, temprature: temp)
-
+            
             return weather
         } catch {
             //print(error)

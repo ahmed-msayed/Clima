@@ -7,8 +7,9 @@
 //
 
 import UIKit
+import CoreLocation
 
-class WeatherViewController: UIViewController, UITextFieldDelegate, WeatherApiDelegate {
+class WeatherViewController: UIViewController {
     
     @IBOutlet weak var conditionImageView: UIImageView!
     @IBOutlet weak var temperatureLabel: UILabel!
@@ -16,21 +17,31 @@ class WeatherViewController: UIViewController, UITextFieldDelegate, WeatherApiDe
     @IBOutlet weak var searchTxtField: UITextField!
     
     let weatherAPI = WeatherAPI()
+    let locationManager = CLLocationManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         weatherAPI.delegate = self
         searchTxtField.delegate = self  //making the VC as the delegate
+        locationManager.delegate = self
+        
+        locationManager.requestAlwaysAuthorization()    //ask user for permission
+        //info.plist -> Information Property -> add "Privacy - location when in use"
+        //and add "Privacy - Location Always and When In Use Usage Description"
+        locationManager.requestLocation()
     }
+}
+
+
+//MARK: - UITextFieldDelegate
+extension WeatherViewController: UITextFieldDelegate {
     
     @IBAction func searchBtnPressed(_ sender: UIButton) {
-        print(searchTxtField.text!)
         searchTxtField.endEditing(true) //dismiss keyboard
     }
     
     //triggered when pressing the return "go" key in the keyboard
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        print(searchTxtField.text!)
         searchTxtField.endEditing(true) //dismiss keyboard
         return true
     }
@@ -49,18 +60,22 @@ class WeatherViewController: UIViewController, UITextFieldDelegate, WeatherApiDe
     //triggered when "endEditing()" is called
     func textFieldDidEndEditing(_ textField: UITextField) {
         if let city = searchTxtField.text {
-            weatherAPI.performRequest(with: city)
+            weatherAPI.fetchWeather(with: city)
         }
         searchTxtField.text = ""
     }
-    
+}
+
+
+//MARK: - WeatherApiDelegate
+extension WeatherViewController: WeatherApiDelegate {
     
     func didUpdateWeather(weather: WeatherModel) {
-//        DispatchQueue.main.async {
-            conditionImageView.image = UIImage(systemName: weather.conditionName)
-            temperatureLabel.text = weather.tempratureString
-            cityLabel.text = weather.cityName
-//        }
+        //        DispatchQueue.main.async {
+        conditionImageView.image = UIImage(systemName: weather.conditionName)
+        temperatureLabel.text = weather.tempratureString
+        cityLabel.text = weather.cityName
+        //        }
     }
     
     func didFailWithError(error: Error) {
@@ -68,3 +83,24 @@ class WeatherViewController: UIViewController, UITextFieldDelegate, WeatherApiDe
     }
 }
 
+//MARK: - CLLocationManagerDelegate
+extension WeatherViewController: CLLocationManagerDelegate {
+    
+    @IBAction func locationBtnPressed(_ sender: UIButton) {
+        locationManager.requestLocation()
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if let location = locations.last {
+            locationManager.stopUpdatingLocation()  //to stop fetching current location again
+            let lat = location.coordinate.latitude
+            let lon = location.coordinate.longitude
+            weatherAPI.fetchWeather(longitude: lon, latitude: lat)
+        }
+        //Product -> Scheme -> Edit Scheme -> Options -> Allow Location Simulation must be checked and try providing a default location, don't leave it set to "none"
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print(error)
+    }
+}

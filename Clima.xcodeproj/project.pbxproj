@@ -35,6 +35,7 @@
 		ADAA27BC231BBFB300365194 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		ADAA27BE231BBFB300365194 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ADAA27CD231BC87F00365194 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		E215B08E270778F0007A5E8F /* Cairo Egypt Location.gpx */ = {isa = PBXFileReference; lastKnownFileType = text.xml; name = "Cairo Egypt Location.gpx"; path = "/Users/ahmed/Projects/Clima/Clima/Resources/Cairo Egypt Location.gpx"; sourceTree = "<absolute>"; };
 		E26ADEB1270269C800A8263A /* WeatherModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherModel.swift; sourceTree = "<group>"; };
 		E26B795F26FE1C7400F2F378 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		E2872C2226FF3E2100AEBE89 /* WeatherAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherAPI.swift; sourceTree = "<group>"; };
@@ -136,6 +137,7 @@
 			isa = PBXGroup;
 			children = (
 				E26B795F26FE1C7400F2F378 /* Constants.swift */,
+				E215B08E270778F0007A5E8F /* Cairo Egypt Location.gpx */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
